@@ -18,21 +18,26 @@ export default function Main() {
     aboutMe: localStorage.getItem("aboutMe") || "",
     education: JSON.parse(localStorage.getItem("education") || "[]"),
     skills: JSON.parse(localStorage.getItem("skills") || "[]"),
-    workExperiences: JSON.parse(localStorage.getItem("workExperiences") || "[]"),
+    workExperiences: JSON.parse(
+      localStorage.getItem("workExperiences") || "[]"
+    ),
   }));
 
   const isCvMainVisible =
-  resume.fullName ||
-  resume.email ||
-  resume.phone ||
-  resume.aboutMe.trim().length > 0 ||
-  resume.education.length > 0 ||
-  resume.skills.length > 0 ||
-  resume.workExperiences.length > 0;
+    resume.fullName ||
+    resume.email ||
+    resume.phone ||
+    resume.aboutMe.trim().length > 0 ||
+    resume.education.length > 0 ||
+    resume.skills.length > 0 ||
+    resume.workExperiences.length > 0;
 
   const updateResume = (key, value) => {
     setResume((prev) => ({ ...prev, [key]: value }));
-    localStorage.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
+    localStorage.setItem(
+      key,
+      typeof value === "string" ? value : JSON.stringify(value)
+    );
   };
 
   const clearResume = () => {
@@ -60,30 +65,30 @@ export default function Main() {
         { school: "Faik Konica", degree: "High School Diploma", year: 2010 },
         { school: "Faik Konica", degree: "High School Diploma", year: 2010 },
       ],
-      skills: [
-        { skill: "Leadership" },
-        { skill: "Design" },
-      ],
+      skills: [{ skill: "Leadership" }, { skill: "Design" }],
       workExperiences: [
         {
           companyName: "Per Programera",
           title: "Assistant Manager",
           date: 2020,
           description:
-            "Implemented sustainable and organic farming practices, resulting in high-quality beet production and increased farm profitability.",
+            "Played a key role in overseeing daily operations, ensuring seamless workflow and team coordination. Successfully implemented innovative strategies to enhance productivity, improve client satisfaction, and optimize resource allocation. Led team training and development initiatives, fostering a collaborative and results-driven work environment. Contributed to achieving organizational goals by streamlining processes and managing critical projects effectively.",
         },
         {
           companyName: "Drd Company",
           title: "Manager",
           date: "2022 - Present",
           description:
-            "Implemented sustainable and organic farming practices, resulting in high-quality beet production and increased farm profitability. Developed and promoted Schrute Farms as a successful agrotourism destination, attracting visitors for farm tours, bed and breakfast stays, and beet-related activities.",
+            "Led operations and growth initiatives, implementing sustainable practices that boosted product quality and profitability. Developed and promoted the company as a premier agrotourism destination, attracting visitors through unique farm experiences and hospitality services.",
         },
       ],
     };
     setResume(exampleData);
     Object.entries(exampleData).forEach(([key, value]) =>
-      localStorage.setItem(key, typeof value === "string" ? value : JSON.stringify(value))
+      localStorage.setItem(
+        key,
+        typeof value === "string" ? value : JSON.stringify(value)
+      )
     );
   };
 
@@ -119,7 +124,9 @@ export default function Main() {
             />
             <WorkExperience
               workExperiences={resume.workExperiences}
-              setWorkExperiences={(value) => updateResume("workExperiences", value)}
+              setWorkExperiences={(value) =>
+                updateResume("workExperiences", value)
+              }
             />
             <Skills
               skills={resume.skills}
@@ -129,7 +136,7 @@ export default function Main() {
         </div>
         <div className="px-2 min-h-[768px] mx-auto">
           <div ref={componentRef}>
-           {isCvMainVisible && <CvMain {...resume} />}
+            {isCvMainVisible && <CvMain {...resume} />}
           </div>
         </div>
       </div>
