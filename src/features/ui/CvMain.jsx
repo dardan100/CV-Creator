@@ -34,7 +34,7 @@ const CvMain = ({
           {/* Main Content */}
           <div className="w-full px-4 py-4 overflow-visible sm:px-6 sm:py-6">
             {/* About Me */}
-            {aboutMe && aboutMe.trim().length > 0 && (
+            {aboutMe.length > 0 && (
               <div className="mb-8">
                 <h2 className="font-medium text-xl mb-4">About Me</h2>
                 <div
