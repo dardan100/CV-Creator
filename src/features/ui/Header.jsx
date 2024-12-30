@@ -1,9 +1,7 @@
 import React from "react";
 import { PenTool } from "react-feather";
 
-
-export default function Header({ clearResume, exampleResume,handlePrint }) {
-  
+export default function Header({ clearResume, exampleResume, handlePrint }) {
   return (
     <div className="flex  justify-between py-4 px-4">
       <section className="flex items-center gap-2">
@@ -25,7 +23,12 @@ export default function Header({ clearResume, exampleResume,handlePrint }) {
           Clear Resume
         </button>
 
-        <button className="bg-blue-500 px-2 py-2 text-white border border-blue-700" onClick={()=>handlePrint()}>Print CV</button>
+        <button
+          className="bg-blue-500 px-2 py-2 text-white border border-blue-700"
+          onClick={() => handlePrint()}
+        >
+          Print CV
+        </button>
       </section>
     </div>
   );

@@ -3,58 +3,50 @@ import PersonalInformation from "./components/PersonalInformation";
 import WorkExperience from "./components/WorkExperience";
 import Education from "./components/Education";
 import Skills from "./components/Skills";
+
 import CvMain from "./ui/CvMain";
 import Header from "./ui/Header";
+
 import useHandlePrint from "./hook/useHandlePrint";
 
 export default function Main() {
+  // Helper function to get data from localStorage
+  const getLocalStorage = (key, defaultValue) => {
+    const storedValue = localStorage.getItem(key);
+    return storedValue ? JSON.parse(storedValue) : defaultValue;
+  };
+
   const { componentRef, handlePrint } = useHandlePrint();
 
-  // Consolidated state for the resume
-  const [resume, setResume] = useState(() => ({
-    fullName: localStorage.getItem("fullName") || "",
-    email: localStorage.getItem("email") || "",
-    phone: localStorage.getItem("phone") || "",
-    aboutMe: localStorage.getItem("aboutMe") || "",
-    education: JSON.parse(localStorage.getItem("education") || "[]"),
-    skills: JSON.parse(localStorage.getItem("skills") || "[]"),
-    workExperiences: JSON.parse(
-      localStorage.getItem("workExperiences") || "[]"
-    ),
-  }));
+  // State initialization using localStorage
+  const [fullName, setFullName] = useState(() =>
+    getLocalStorage("fullName", "")
+  );
+  const [email, setEmail] = useState(() => getLocalStorage("email", ""));
+  const [phone, setPhone] = useState(() => getLocalStorage("phone", ""));
+  const [aboutMe, setAboutMe] = useState(() => getLocalStorage("aboutMe", ""));
+  const [education, setEducation] = useState(() =>
+    getLocalStorage("education", [])
+  );
+  const [skills, setSkills] = useState(() => getLocalStorage("skills", []));
+  const [workExperiences, setWorkExperiences] = useState(() =>
+    getLocalStorage("workExperiences", [])
+  );
 
-  const isCvMainVisible =
-    resume.fullName ||
-    resume.email ||
-    resume.phone ||
-    resume.aboutMe.trim().length > 0 ||
-    resume.education.length > 0 ||
-    resume.skills.length > 0 ||
-    resume.workExperiences.length > 0;
+  // Clear all data
+  function clearResume() {
+    setFullName("");
+    setEmail("");
+    setPhone("");
+    setAboutMe("");
+    setEducation([]);
+    setSkills([]);
+    setWorkExperiences([]);
+    localStorage.clear(); // Clear localStorage to reset all saved data
+  }
 
-  const updateResume = (key, value) => {
-    setResume((prev) => ({ ...prev, [key]: value }));
-    localStorage.setItem(
-      key,
-      typeof value === "string" ? value : JSON.stringify(value)
-    );
-  };
-
-  const clearResume = () => {
-    const clearedResume = {
-      fullName: "",
-      email: "",
-      phone: "",
-      aboutMe: "",
-      education: [],
-      skills: [],
-      workExperiences: [],
-    };
-    setResume(clearedResume);
-    Object.keys(clearedResume).forEach((key) => localStorage.removeItem(key));
-  };
-
-  const exampleResume = () => {
+  // Load example data
+  function exampleResume() {
     const exampleData = {
       fullName: "Dardan Nuredini",
       email: "nuredinidardan5@gmail.com",
@@ -72,31 +64,58 @@ export default function Main() {
           title: "Assistant Manager",
           date: 2020,
           description:
-            "Played a key role in overseeing daily operations, ensuring seamless workflow and team coordination. Successfully implemented innovative strategies to enhance productivity, improve client satisfaction, and optimize resource allocation. Led team training and development initiatives, fostering a collaborative and results-driven work environment. Contributed to achieving organizational goals by streamlining processes and managing critical projects effectively.",
+            "Implemented sustainable and organic farming practices, resulting in high-quality beet production and increased farm profitability.",
         },
         {
           companyName: "Drd Company",
           title: "Manager",
           date: "2022 - Present",
           description:
-            "Led operations and growth initiatives, implementing sustainable practices that boosted product quality and profitability. Developed and promoted the company as a premier agrotourism destination, attracting visitors through unique farm experiences and hospitality services.",
+            "Implemented sustainable and organic farming practices, resulting in high-quality beet production and increased farm profitability. Developed and promoted Schrute Farms as a successful agrotourism destination, attracting visitors for farm tours, bed and breakfast stays, and beet-related activities.",
         },
       ],
     };
-    setResume(exampleData);
-    Object.entries(exampleData).forEach(([key, value]) =>
-      localStorage.setItem(
-        key,
-        typeof value === "string" ? value : JSON.stringify(value)
-      )
-    );
-  };
+
+    setFullName(exampleData.fullName);
+    setEmail(exampleData.email);
+    setPhone(exampleData.phone);
+    setAboutMe(exampleData.aboutMe);
+    setEducation(exampleData.education);
+    setSkills(exampleData.skills);
+    setWorkExperiences(exampleData.workExperiences);
+  }
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    const savedCategories = [
+      "fullName",
+      "email",
+      "phone",
+      "aboutMe",
+      "education",
+      "skills",
+      "workExperiences",
+    ];
+    const saveInfo = [
+      fullName,
+      email,
+      phone,
+      aboutMe,
+      education,
+      skills,
+      workExperiences,
+    ];
+
+    savedCategories.forEach((key, index) => {
+      localStorage.setItem(key, JSON.stringify(saveInfo[index]));
+    });
+  }, [fullName, email, phone, aboutMe, education, skills, workExperiences]);
 
   useEffect(() => {
-    if (!resume.aboutMe) {
-      setResume((prev) => ({ ...prev, aboutMe: "" }));
+    if (!aboutMe) {
+      setAboutMe((prev) => ({ ...prev, aboutMe: "" }));
     }
-  }, [resume.aboutMe]);
+  }, [aboutMe]);
 
   return (
     <>
@@ -109,34 +128,35 @@ export default function Main() {
         <div className="flex items-center justify-center min-h-screen">
           <div className="flex flex-col gap-5 w-full">
             <PersonalInformation
-              fullName={resume.fullName}
-              setFullName={(value) => updateResume("fullName", value)}
-              email={resume.email}
-              setEmail={(value) => updateResume("email", value)}
-              phone={resume.phone}
-              setPhone={(value) => updateResume("phone", value)}
-              aboutMe={resume.aboutMe}
-              setAboutMe={(value) => updateResume("aboutMe", value)}
+              fullName={fullName}
+              setFullName={setFullName}
+              email={email}
+              setEmail={setEmail}
+              phone={phone}
+              setPhone={setPhone}
+              aboutMe={aboutMe}
+              setAboutMe={setAboutMe}
             />
-            <Education
-              education={resume.education}
-              setEducation={(value) => updateResume("education", value)}
-            />
+            <Education education={education} setEducation={setEducation} />
             <WorkExperience
-              workExperiences={resume.workExperiences}
-              setWorkExperiences={(value) =>
-                updateResume("workExperiences", value)
-              }
+              workExperiences={workExperiences}
+              setWorkExperiences={setWorkExperiences}
             />
-            <Skills
-              skills={resume.skills}
-              setSkills={(value) => updateResume("skills", value)}
-            />
+            <Skills skills={skills} setSkills={setSkills} />
           </div>
         </div>
+
         <div className="px-2 min-h-[768px] mx-auto">
           <div ref={componentRef}>
-            {isCvMainVisible && <CvMain {...resume} />}
+            <CvMain
+              fullName={fullName}
+              email={email}
+              phone={phone}
+              aboutMe={aboutMe}
+              education={education}
+              skills={skills}
+              workExperiences={workExperiences}
+            />
           </div>
         </div>
       </div>

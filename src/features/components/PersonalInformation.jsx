@@ -62,12 +62,12 @@ export default function PersonalInformation({
           <label htmlFor="">About Me</label>
           {/* ReactQuill for editing */}
           <ReactQuill
-  className="border border-blue-400"
-  theme="snow"
-  value={aboutMe}
-  onChange={(content) => setAboutMe(sanitizeContent(content))} // Regular updates
-  style={{ direction: "ltr", textAlign: "left" }}
-/>
+            className="border border-blue-400"
+            theme="snow"
+            value={aboutMe}
+            onChange={(content) => setAboutMe(sanitizeContent(content))} // Regular updates
+            style={{ direction: "ltr", textAlign: "left" }}
+          />
         </div>
       </section>
     </div>

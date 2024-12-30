@@ -28,6 +28,7 @@ export default function WorkExperience({
     setWorkExperiences([...workExperiences, newExperience]);
     setShow((prev) => ({ ...prev, [newExperience.id]: true }));
   };
+
   const handleInputChange = (id, field, value) => {
     setWorkExperiences((prev) =>
       prev.map((experience) =>
